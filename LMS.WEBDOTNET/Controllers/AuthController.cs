@@ -12,34 +12,37 @@ using LMS.Repository.Interfaces.Auth;
 using LMS.Utility.Exceptions;
 using LMS.Utility.ExtendedMethods;
 using LMS.Utility.Helpers;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+//using Microsoft.AspNetCore.Authentication;
+//using Microsoft.AspNetCore.Authentication.Cookies;
+//using Microsoft.AspNetCore.Hosting;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.Extensions.Configuration;
+using System.Web.Mvc;
+using System.Configuration;
+using System.Web.Security;
 
 namespace LMS.WEBDOTNET.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IConfiguration _configuration;
+       // private readonly IHostingEnvironment _hostingEnvironment;
+       // private readonly IConfiguration _configuration;
         private readonly IAuthRepository _authRepository;
 
-        public AuthController(IHostingEnvironment hostingEnvironment, IConfiguration configuration, IAuthRepository authRepository)
+        public AuthController( IAuthRepository authRepository)
         {
-            _hostingEnvironment = hostingEnvironment;
-            _configuration = configuration;
+          //  _hostingEnvironment = hostingEnvironment;
+         //   _configuration = configuration;
             _authRepository = authRepository;
         }
-        public IActionResult Index(string returnUrl)
+        public ActionResult Index(string returnUrl)
         {
             TempData[Constants.SessionRedirectUrl] = returnUrl;
             return View();
         }
         [HttpPost]
-        public IActionResult Login(UserViewModel emp)
+        public ActionResult Login(UserViewModel emp)
         {
             try
             {
@@ -85,7 +88,7 @@ namespace LMS.WEBDOTNET.Controllers
             return View("Index");
         }
         [HttpPost]
-        public IActionResult Signup(UserViewModel user)
+        public ActionResult Signup(UserViewModel user)
         {
             try
             {
@@ -159,7 +162,7 @@ namespace LMS.WEBDOTNET.Controllers
         {
             try
             {
-                var basePath = string.Format("{0}://{1}", Request.Scheme, Request.Host);
+                var basePath = string.Format("{0}://{1}", Request.Url.Scheme, Request.Url.Host);
                 var link = basePath + "/Auth/Index";
 
                 var subject = "LMS Registration Successful!";
@@ -168,9 +171,14 @@ namespace LMS.WEBDOTNET.Controllers
                         + "<a href=" + link + "> Click here</a> To Login"
                         + "<br/><br/>Thank You <br/> Steeprise Team";
 
-                var strFrom = _configuration["EmailCredential:Fromemail"];
-                var strFromPassword = _configuration["EmailCredential:FromPassword"];
-                var strCCEmail = _configuration["EmailNotification:CCemail"];
+                var strFrom = ConfigurationManager.AppSettings["Fromemail"];
+                var strFromPassword = ConfigurationManager.AppSettings["FromPassword"];
+                var strCCEmail = ConfigurationManager.AppSettings["CCemail"];
+
+
+                //var strFrom = _configuration["EmailCredential:Fromemail"];
+                //var strFromPassword = _configuration["EmailCredential:FromPassword"];
+                //var strCCEmail = _configuration["EmailNotification:CCemail"];
 
                 var email = new MailMessage(strFrom, u.Email)
                 {
@@ -225,7 +233,7 @@ namespace LMS.WEBDOTNET.Controllers
             }
             return true;
         }
-        private IActionResult GoAhead(string role, int userid)
+        private ActionResult GoAhead(string role, int userid)
         {
             string rUrl = Convert.ToString(TempData[Constants.SessionRedirectUrl]);
             if (!string.IsNullOrWhiteSpace(rUrl))
@@ -247,13 +255,16 @@ namespace LMS.WEBDOTNET.Controllers
                 return RedirectToAction("Dashboard", "Employee");
             }
         }
-        public IActionResult Logout(string returnUrl = "")
+        public ActionResult Logout(string returnUrl = "")
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            Session.Clear();
+            FormsAuthentication.SignOut();
+            //HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Auth", new { returnUrl = returnUrl });
         }
-        public IActionResult SetSession(UserViewModel result)
+        public ActionResult SetSession(UserViewModel result)
         {
             try
             {
@@ -289,7 +300,7 @@ namespace LMS.WEBDOTNET.Controllers
             return GoAhead(result.RoleName, result.UserId);
         }
         [HttpGet]
-        public IActionResult UnauthorizedUser()
+        public ActionResult UnauthorizedUser()
         {
             var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
             if (user?.RoleName == Constants.AdminRole)
@@ -303,12 +314,12 @@ namespace LMS.WEBDOTNET.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult ForgotPassword()
+        public ActionResult ForgotPassword()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult ForgotPassword(string email)
+        public ActionResult ForgotPassword(string email)
         {
             var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);//for loggging
             try
@@ -441,7 +452,7 @@ namespace LMS.WEBDOTNET.Controllers
             throw new UserNotCreatedException("Unable to create user, please contact your teck deck.");
         }
         [HttpGet]
-        public IActionResult ChangePassword()
+        public ActionResult ChangePassword()
         {
             var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
             if (user != null)
@@ -453,7 +464,7 @@ namespace LMS.WEBDOTNET.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult CreateNewPassword(ResetPasswordViewModel model)
+        public ActionResult CreateNewPassword(ResetPasswordViewModel model)
         {
             var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
             try

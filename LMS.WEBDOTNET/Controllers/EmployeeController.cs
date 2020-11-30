@@ -33,12 +33,12 @@ namespace LMS.WEBDOTNET.Controllers
             _configuration = configuration;
             _leaveRepository = leaveRepository;
         }
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
         [Route("[action]")]
-        public IActionResult Dashboard()
+        public ActionResult Dashboard()
         {
             var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
             //if (user == null || user.RoleName != Constants.EmployeeRole)
@@ -148,7 +148,7 @@ namespace LMS.WEBDOTNET.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public IActionResult ApplyLeave([FromForm]LeaveDetailsViewModel model)
+        public ActionResult ApplyLeave([FromForm]LeaveDetailsViewModel model)
         {
             try
             {

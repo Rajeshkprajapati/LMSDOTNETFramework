@@ -229,13 +229,13 @@ namespace LMS.WEBDOTNET.Controllers
         }
         //[HttpGet]
         //[Route("[action]")]
-        //public IActionResult ChangePassword()
+        //public ActionResult ChangePassword()
         //{
         //    return View();
         //}
         //[HttpPost]
         //[Route("[action]")]
-        //public IActionResult CreateNewPassword(ResetPasswordViewModel model)
+        //public ActionResult CreateNewPassword(ResetPasswordViewModel model)
         //{
         //    var status = false;
         //    try
