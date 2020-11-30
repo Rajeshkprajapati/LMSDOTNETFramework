@@ -13,7 +13,9 @@ namespace LMS.Repository.Repositories.Admin
 {
     public class ManageLeavesRepository : IManageLeavesRepository
     {
-        private readonly string connectionString;
+        //private readonly string connectionString;
+        private readonly string connectionString = ConfigurationManager.AppSettings["connString"];
+
         //public ManageLeavesRepository(Configuration configurgation)
         //{
         //    // connectionString = configurgation["ConnectionStrings:LMSDB"];

@@ -32,12 +32,12 @@ namespace LMS.WEBDOTNET.Controllers
       // private readonly IConfiguration _configuration;
         private readonly IManageLeavesRepository _manageLeavesRepository = new ManageLeavesRepository();
 
-        public AdminController(IManageLeavesRepository manageLeavesRepository)
-        {
-            //_hostingEnvironment = hostingEnvironment;
-           // _configuration = configuration;
-            _manageLeavesRepository = manageLeavesRepository;
-        }
+        //public AdminController(IManageLeavesRepository manageLeavesRepository)
+        //{
+        //    //_hostingEnvironment = hostingEnvironment;
+        //   // _configuration = configuration;
+        //    _manageLeavesRepository = manageLeavesRepository;
+        //}
         
         public ActionResult Index()
         {
@@ -98,12 +98,12 @@ namespace LMS.WEBDOTNET.Controllers
             }
             catch (DataNotFoundException ex)
             {
-                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AdminController), ex);
+                //Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AdminController), ex);
                 ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
             }
             catch (Exception ex)
             {
-                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AdminController), ex);
+                //Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AdminController), ex);
                 ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
             }
             return null;
@@ -147,9 +147,14 @@ namespace LMS.WEBDOTNET.Controllers
                 var subject = "Leave has been rejected";
                 var body = "Dear "+model.EmployeeEmail+",<br/><br/> Your Leave has been rejected for duration "+model.StartDate+" to "+model.EndDate
                         + "<br/>Please contact your reporting manager for any queries.<br/> <br/>Thank You <br/> Steeprise Team";
-                var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
-                var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
-                var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
+
+                var strFrom = ConfigurationManager.AppSettings["Fromemail"];
+                var strFromPassword = ConfigurationManager.AppSettings["FromPassword"];
+                var strCCEmail = ConfigurationManager.AppSettings["CCemail"];
+
+                //var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
+                //var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
+                //var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
 
                 var email = new MailMessage(strFrom, model.EmployeeEmail)
                 {
@@ -192,9 +197,13 @@ namespace LMS.WEBDOTNET.Controllers
                 var subject = "Leave has been approved";
                 var body = "Dear " + model.EmployeeEmail + ",<br/><br/> Your Leave has been approved for duration " + model.StartDate + " To " + model.EndDate
                         + "<br/><br/> Thank You <br/> Steeprise Team";
-                var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
-                var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
-                var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
+                var strFrom = ConfigurationManager.AppSettings["Fromemail"];
+                var strFromPassword = ConfigurationManager.AppSettings["FromPassword"];
+                var strCCEmail = ConfigurationManager.AppSettings["CCemail"];
+
+                //var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
+                //var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
+                //var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
 
                 var email = new MailMessage(strFrom, model.EmployeeEmail)
                 {

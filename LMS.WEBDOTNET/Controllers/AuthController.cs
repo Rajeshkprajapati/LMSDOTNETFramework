@@ -83,7 +83,7 @@ namespace LMS.WEBDOTNET.Controllers
             }
             catch (InvalidUserCredentialsException ex)
             {
-                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AuthController), ex);
+                //Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AuthController), ex);
                 //ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
                 ViewBag.Message = "Invalid Credential!";
                 ViewBag.Success = false;
@@ -340,9 +340,15 @@ namespace LMS.WEBDOTNET.Controllers
                     var basePath = ""; //string.Format("{0}://{1}", Request.Scheme, Request.Host);
                     var link = basePath + "/Auth/ResetPassword/?id=" + emailEncr;
 
-                    var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
-                    var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
-                    var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
+                    //var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
+                    //var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
+                    //var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
+
+                    var strFrom = ConfigurationManager.AppSettings["Fromemail"];
+                    var strFromPassword = ConfigurationManager.AppSettings["FromPassword"];
+                    var strCCEmail = ConfigurationManager.AppSettings["CCemail"];
+
+
                     var subject = "Reset Password";
                     var body = "Dear Candidate,<br/>You initiated a request to help with your account password. Click the link below to set a new password for Steeprise LMS portal" +
                         "<br/><br/><a href=" + link + ">Reset Password link</a><br><br>" + "Thank You<br>Steeprise Team";
@@ -393,7 +399,7 @@ namespace LMS.WEBDOTNET.Controllers
             }
             catch (Exception ex)
             {
-                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AuthController), ex);
+                //Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AuthController), ex);
                 ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
                 ViewData["SuccessMessage"] = ex.Message;//"Error Occured,Please contact at support@steeprise.com";
             }
@@ -432,7 +438,7 @@ namespace LMS.WEBDOTNET.Controllers
             }
             catch (UserNotCreatedException ex)
             {
-                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, user.UserId, typeof(AuthController), ex);
+               // Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, user.UserId, typeof(AuthController), ex);
                 ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
             }
             ModelState.Clear();

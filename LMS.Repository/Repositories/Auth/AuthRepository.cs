@@ -13,8 +13,8 @@ namespace LMS.Repository.Repositories.Auth
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly string connectionString = "Data Source=DESKTOP-PGDM0N4\\SQLEXPRESS; Initial Catalog=LMS; User ID=sa; Password=vishwakarma@123";//WebConfigurationManager.AppSettings["connString"];;
-        //private readonly string connectionString = ConfigurationManager.AppSettings["connString"];
+        private readonly string connectionString = "Data Source=LAPTOP-5DCMGJD9; Initial Catalog=LMS; User ID=sa; Password=steeprise123";//WebConfigurationManager.AppSettings["connString"];;
+        private readonly string connectionString1 = ConfigurationManager.AppSettings["connString"];
 
         //public AuthRepository( Configuration configuration)
         //{

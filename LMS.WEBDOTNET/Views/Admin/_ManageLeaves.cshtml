@@ -34,7 +34,7 @@
                 <tbody>
                     @if (Model != null)
                     {
-                        @foreach (var item in (Model).Select((x, i) => new { data = x, index = i + 1 }))
+                        foreach (var item in (Model).Select((x, i) => new { data = x, index = i + 1 }))
                         {
                             <tr>
                                 <td>@item.index</td>
