@@ -1,0 +1,107 @@
+﻿<form method="post" id="searchcriteria" action="ApplyLeave" name="leaveForm">
+    <div class="row">
+        <div class="col-sm-6 col-md-4">
+            @*<span class="input-group-addon">
+                    Start Date
+                </span>*@
+
+            <input type="text" required readonly name="StartDate" id="picdate1" class="form-control" style="background-color:#616c7f;color:#fff" placeholder="Start Date">
+            @*<div class="form-group">
+                    <a href="javascript:void(0);" id="picdate_1">  <i class="fa fa-calendar" style="font-size:20px;color:#ad212b;" aria-hidden="true"></i></a>
+                </div>*@
+
+        </div>
+        <div class="col-sm-6 col-md-4 form-group">
+            @*<span class="input-group-addon">
+                    End Date
+                </span>*@
+            <input type="text" required readonly name="EndDate" id="picdate2" style="background-color:#616c7f;color:#fff" class="form-control" placeholder="End Date">
+            @*<div class="form-group">
+                    <a href="javascript:void(0);" id="picdate_2">  <i class="fa fa-calendar" style="font-size:20px;color:#ad212b;" aria-hidden="true"></i></a>
+                </div>*@
+        </div>
+        <div class="col-sm-6 col-md-3">
+            <input type="submit" class="btn btn-md btn-info" onclick="return VerifyForm()" value="Apply Leave">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-4">
+            @*<span class="input-group-addon">
+                    Leave Type
+                </span>*@
+            <select class="form-control" required name="LeaveTypeId" id="leaveType" style="background-color:#616c7f;color:#fff">
+                <option value="">Select LeaveType</option>
+                @if (ViewBag.LeaveType != null)
+                {
+                    foreach (var item in ViewBag.LeaveType)
+                    {
+                        <option value="@item.LeaveTypeId">@item.LeaveType</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            @*<span class="input-group-addon">
+                    Remarks
+                </span>*@
+            <textarea class="form-control" rows="6" id="remarks" style="background-color:#616c7f;color:#fff;height: 85px !important;" name="Remarks" cols="3" placeholder="Enter Remarks here"></textarea>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var initCalendars = function (selector, date) {
+            let dPicker = tail.DateTime(selector, {
+                dateFormat: "YYYY-mm-dd",
+                timeFormat: false,
+                position: "bottom",
+                closeButton: false,
+                //dateEnd: new Date(),
+                dateStart: date
+            })
+                .on("open", () => {
+                    isCalendarOpen = true;
+                })
+                .on("close", () => {
+                    isCalendarOpen = false;
+                })
+            //dPicker.selectDate(date.getFullYear(), date.getMonth(), date.getDate());
+            return dPicker;
+        };
+
+
+        let startDateCalendar = initCalendars('#picdate1', new Date());
+        startDateCalendar.on("change", () => { });
+
+        let endDateCalendar = initCalendars('#picdate2', new Date());
+        endDateCalendar.on("change", () => { });
+
+        //let icon = document.getElementById('picdate_1');
+        //icon.addEventListener('click', function () {
+        //    if (startDateCalendar) {
+        //        startDateCalendar.toggle();
+        //    }
+        //}, false);
+
+        //let icon2 = document.getElementById('picdate_2');
+        //icon2.addEventListener('click', function () {
+        //    if (endDateCalendar) {
+        //        endDateCalendar.toggle();
+        //    }
+        //}, false);
+
+    });
+    function VerifyForm() {
+        let remarks = $('#remarks').val();
+        let leaveType = $('#leaveType').val();
+        let EndDate = $('#picdate2').val();
+        let startdate = $('#picdate1').val();
+        if (remarks != null && remarks.length > 0 && leaveType != null && leaveType.length > 0 && startdate != null && startdate.length > 0 && EndDate != null && EndDate.length > 0) {
+            return truel
+        } else {
+            alert('Please fill all fields!');
+            return false;
+        }
+    }
+</script>

@@ -1,0 +1,120 @@
+﻿
+@model IEnumerable<LMS.Model.ViewModel.Admin.ManageLeaveViewModel>
+<style>
+    .buttons-excel {
+        margin: 0px 0px -36px 170px;
+    }
+
+    th, td {
+        white-space: nowrap !important;
+    }
+
+    #leavedtltbl_filter {
+        margin-top: -4%;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-12" style="overflow:auto;">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped table-bordered" id="leavedtltbl">
+                <thead>
+                    <tr>
+                        <th class="text-center">Sr</th>
+                        <th class="text-center">EmployeeName</th>
+                        <th class="text-center">StartDate</th>
+                        <th class="text-center">EndDate</th>
+                        <th class="text-center">CreatedDate</th>
+                        <th class="text-center">LeaveType</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Remarks</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in (Model).Select((x, i) => new { data = x, index = i + 1 }))
+                        {
+                            <tr>
+                                <td>@item.index</td>
+                                <td>
+                                    @item.data.EmployeeName
+                                </td>
+                                <td>@item.data.StartDate</td>
+                                <td>@item.data.EndDate</td>
+                                <td>@item.data.CreatedDate</td>
+                                <td>@item.data.LeaveType</td>
+                                <td>@item.data.LeaveStatus</td>
+                                <td>@item.data.Remarks</td>
+                                <td>
+                                    @if (item.data.LeaveStatus == "Pending")
+                                    {
+                                        <button class="btn btn-sm bg-primary" onclick="approveReject('2','@item.data.EmployeeId','@item.data.Id','@item.data.EmployeeEmail','@item.data.StartDate','@item.data.EndDate')">Approve</button>
+                                        <button class="btn btn-sm bg-danger" onclick="approveReject('3','@item.data.EmployeeId','@item.data.Id','@item.data.EmployeeEmail','@item.data.StartDate','@item.data.EndDate')">Reject</button>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.data.LeaveStatus</span>
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#leavedtltbl').DataTable({
+            //dom: 'blfrtip',
+            dom: 'Blfrtip',
+
+            //buttons: [
+            //    {
+            //        extend: 'excel',
+            //        title: 'All Leave Data'
+            //    }
+            //]
+            buttons: [
+                'copy', 'excel', 'pdf'
+            ]
+            //order: [[0, 'asc']]
+        });
+
+        let tb = $('#leavedtltbl').DataTable();
+
+        if (!tb.data().count()) {
+            $('#leavedtltbl').DataTable().fndestroy();
+            $('#leavedtltbl').DataTable({
+                searching: false
+            })
+        } else {
+            $('.buttons-excel').html('export data');
+            $('.buttons-excel').addClass("btn btn-primary");
+            $('.buttons-excel').addClass("exportdatatablbtn");
+        }
+    });
+    function approveReject(action, empid, id, email, sdate, edate) {
+        let url = '/Admin/ApproveRejectLeave/';
+        let data = { LeaveStatusId: action, EmployeeId: empid, Id: id, EmployeeEmail: email, StartDate: sdate, EndDate: edate };
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        }).then(res => res.json()).then(resp => {
+            if (resp) {
+                alert("Leave processed sucessfully");
+                console.log('Success');
+                location.reload();
+            }
+        }).catch(err => console.log(err));
+    }
+</script>

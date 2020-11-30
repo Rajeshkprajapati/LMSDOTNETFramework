@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "Unauthorized User";
+}
+
+<div class="jumbotron">
+    <div class="container screen-height home-screen-section">
+        <h1>401 Error Page</h1>
+        <div class="error-msg spacer-top-20">
+            @{
+                @if (ViewBag.Message != null)
+                {
+                    <p><b>@ViewBag.Message</b></p>
+                }
+            }
+        </div>
+        <h5 class="spacer-top-20">401 Access Denied</h5>        
+        <p class="spacer-top-20">
+            <a href="/Auth/Index/" class="quickLink text-uppercase">Go to Login Page</a>
+        </p>
+    </div>
+</div>
+

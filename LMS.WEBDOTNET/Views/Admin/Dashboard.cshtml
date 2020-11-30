@@ -1,0 +1,121 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/lib/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/css/Employee/dashboard.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary"></button>
+            </div>
+            <div class="img bg-wrap text-center py-4" style="background-image: url('/images/sidebar_bg_1.jpg');">
+                <div class="user-logo">
+                    <div class="img" style="background-image: url('/ProfilePic/Avatar.jpg');"></div>
+                    @if (ViewBag.Name != null)
+                    {
+                        <h3>@ViewBag.Name</h3>
+                    }
+                    else
+                    {
+                        <h3>User</h3>
+                    }
+                </div>
+            </div>
+            <ul class="list-unstyled components mb-5">
+                <li class="active" onclick="manageLeaves()">
+                    <a asp-controller="Admin" asp-action="Dashboard"><span class="fa fa-home mr-3"></span>Manage Leaves</a>
+                </li>
+                @*<li>
+                        <!--<a href="#"><span class="fa fa-download mr-3 notif"><small class="d-flex align-items-center justify-content-center">5</small></span> Download</a>-->
+                        <a href="#"><span class="fa fa-download mr-3 notif"></span> Download</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-calendar mr-3"></span> History</a>
+                    </li>
+                    <li>
+                        <a href="#"><span class="fa fa-trophy mr-3"></span> Top Review</a>
+                    </li>
+                *@
+                <li>
+                    <a asp-controller="Auth" asp-action="ChangePassword"><span class="fa fa-cog mr-3"></span> Change Password</a>
+                </li>
+                <li>
+                    <a asp-controller="Auth" asp-action="Logout"><span class="fa fa-sign-out mr-3"></span> Sign Out</a>
+                </li>
+            </ul>
+
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5 pt-5 bg-light">
+            <h2 class="mb-4">Manage Leaves</h2>
+            <div id="mycontent">
+
+            </div>
+            <div id="mycontentformanageleave">
+
+            </div>
+        </div>
+    </div>
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
+        </script>
+    </environment>
+
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var fullHeight = function () {
+
+                $('.js-fullheight').css('height', $(window).height());
+                $(window).resize(function () {
+                    $('.js-fullheight').css('height', $(window).height());
+                });
+
+            };
+
+            fullHeight();
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+
+            function manageLeaves() {
+                let url = '/Admin/ManageLeaves/';
+                fetch(url).then(res => res.text()).then(res => {
+                    if (res != null) {
+                        $('div#mycontentformanageleave').html(res);
+                    }
+                }).catch(err => console.log(err));
+            };
+
+            manageLeaves();
+        });
+    </script>
+</body>
+</html>
