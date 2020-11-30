@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",  
+  "libraries": [
+    {
+      "library": "datatables@1.10.21",
+      "destination": "wwwroot/lib/datatables/"
+    },
+    {
+      "library": "font-awesome@4.6.3",
+      "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "bootstrap-calendar@0.2.5",
+      "destination": "wwwroot/lib/bootstrap-calendar/",
+      "files": [
+        "js/calendar.min.js"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using LMS.Model.ViewModel.Shared;
 using LMS.Repository.DataModel.Admin;
 using LMS.Repository.DataModel.Shared;
 using LMS.Repository.Interfaces.Admin;
+using LMS.Repository.Repositories.Admin;
 using LMS.Utility.Exceptions;
 using LMS.Utility.ExtendedMethods;
 using LMS.Utility.Helpers;
@@ -28,7 +30,7 @@ namespace LMS.WEBDOTNET.Controllers
     {
        // private readonly IHostingEnvironment _hostingEnvironment;
       // private readonly IConfiguration _configuration;
-        private readonly IManageLeavesRepository _manageLeavesRepository;
+        private readonly IManageLeavesRepository _manageLeavesRepository = new ManageLeavesRepository();
 
         public AdminController(IManageLeavesRepository manageLeavesRepository)
         {
@@ -45,7 +47,7 @@ namespace LMS.WEBDOTNET.Controllers
         [Route("[action]")]
         public ActionResult Dashboard()
         {
-            var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
+            var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];
             if (user == null || user.RoleName != Constants.AdminRole)
             {
                 return RedirectToAction("Index","Auth");
@@ -108,7 +110,7 @@ namespace LMS.WEBDOTNET.Controllers
         }
         [HttpPost]
         [Route("[action]")]
-        public JsonResult ApproveRejectLeave([FromBody]ManageLeaveViewModel model)
+        public JsonResult ApproveRejectLeave(ManageLeaveViewModel model)
         {
             try
             {
@@ -145,9 +147,9 @@ namespace LMS.WEBDOTNET.Controllers
                 var subject = "Leave has been rejected";
                 var body = "Dear "+model.EmployeeEmail+",<br/><br/> Your Leave has been rejected for duration "+model.StartDate+" to "+model.EndDate
                         + "<br/>Please contact your reporting manager for any queries.<br/> <br/>Thank You <br/> Steeprise Team";
-                var strFrom = _configuration["EmailCredential:Fromemail"];
-                var strFromPassword = _configuration["EmailCredential:FromPassword"];
-                var strCCEmail = _configuration["EmailNotification:CCemail"];
+                var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
+                var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
+                var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
 
                 var email = new MailMessage(strFrom, model.EmployeeEmail)
                 {
@@ -190,9 +192,9 @@ namespace LMS.WEBDOTNET.Controllers
                 var subject = "Leave has been approved";
                 var body = "Dear " + model.EmployeeEmail + ",<br/><br/> Your Leave has been approved for duration " + model.StartDate + " To " + model.EndDate
                         + "<br/><br/> Thank You <br/> Steeprise Team";
-                var strFrom = _configuration["EmailCredential:Fromemail"];
-                var strFromPassword = _configuration["EmailCredential:FromPassword"];
-                var strCCEmail = _configuration["EmailNotification:CCemail"];
+                var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
+                var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
+                var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
 
                 var email = new MailMessage(strFrom, model.EmployeeEmail)
                 {
@@ -240,7 +242,7 @@ namespace LMS.WEBDOTNET.Controllers
         //    var status = false;
         //    try
         //    {
-        //        var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
+        //        var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];
         //        model.Email = user.Email;
         //        status = CreateNewPasswordForAdmin(model);
         //    }

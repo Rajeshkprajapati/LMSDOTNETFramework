@@ -14,11 +14,11 @@ namespace LMS.Repository.Repositories.Employee
     public class LeaveRepository : ILeaveRepository
     {
         private readonly string connectionString;
-        public LeaveRepository(Configuration configuration)
-        {
-            //connectionString = configuration["ConnectionStrings:LMSDB"];
-            connectionString = ConfigurationManager.ConnectionStrings["LMS"].ConnectionString;
-        }
+        //public LeaveRepository(Configuration configuration)
+        //{
+        //    //connectionString = configuration["ConnectionStrings:LMSDB"];
+        //    connectionString = ConfigurationManager.ConnectionStrings["LMS"].ConnectionString;
+        //}
 
         public bool AddLeave(LeaveDetailsModel model)
         {

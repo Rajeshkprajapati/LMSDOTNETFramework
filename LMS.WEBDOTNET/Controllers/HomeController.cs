@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using LMS.Web.Models;
 
 namespace LMS.WEBDOTNET.Controllers
 {

@@ -45,10 +45,38 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=6.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.6.0.0\lib\netstandard2.0\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -99,9 +127,6 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -120,6 +145,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Configuration\IoCBuilder.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -140,6 +166,63 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="libman.json" />
+    <Content Include="wwwroot\css\Auth\index.css" />
+    <Content Include="wwwroot\css\Employee\dashboard.css" />
+    <Content Include="wwwroot\css\site.css" />
+    <Content Include="wwwroot\images\bg.jpg" />
+    <Content Include="wwwroot\images\sidebar_bg_1.jpg" />
+    <Content Include="wwwroot\js\Calendar.js" />
+    <Content Include="wwwroot\js\common.js" />
+    <Content Include="wwwroot\js\Employee\dashboard.js" />
+    <Content Include="wwwroot\js\site.js" />
+    <Content Include="wwwroot\lib\bootstrap-calendar\js\calendar.min.js" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.bootstrap.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.bootstrap.min.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.bootstrap4.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.bootstrap4.min.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.foundation.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.foundation.min.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.jqueryui.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.jqueryui.min.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.material.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.material.min.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.semanticui.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.semanticui.min.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.uikit.css" />
+    <Content Include="wwwroot\lib\datatables\css\dataTables.uikit.min.css" />
+    <Content Include="wwwroot\lib\datatables\css\jquery.dataTables.css" />
+    <Content Include="wwwroot\lib\datatables\css\jquery.dataTables.min.css" />
+    <Content Include="wwwroot\lib\datatables\css\jquery.dataTables_themeroller.css" />
+    <Content Include="wwwroot\lib\datatables\css\jquery.dataTables_themeroller.min.css" />
+    <Content Include="wwwroot\lib\datatables\images\sort_asc.png" />
+    <Content Include="wwwroot\lib\datatables\images\sort_asc_disabled.png" />
+    <Content Include="wwwroot\lib\datatables\images\sort_both.png" />
+    <Content Include="wwwroot\lib\datatables\images\sort_desc.png" />
+    <Content Include="wwwroot\lib\datatables\images\sort_desc_disabled.png" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.bootstrap.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.bootstrap.min.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.bootstrap4.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.bootstrap4.min.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.dataTables.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.dataTables.min.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.foundation.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.foundation.min.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.jqueryui.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.jqueryui.min.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.material.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.material.min.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.semanticui.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.semanticui.min.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.uikit.js" />
+    <Content Include="wwwroot\lib\datatables\js\dataTables.uikit.min.js" />
+    <Content Include="wwwroot\lib\datatables\js\jquery.dataTables.js" />
+    <Content Include="wwwroot\lib\datatables\js\jquery.dataTables.min.js" />
+    <Content Include="wwwroot\lib\font-awesome\css\font-awesome.css" />
+    <Content Include="wwwroot\lib\font-awesome\css\font-awesome.min.css" />
+    <Content Include="wwwroot\lib\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="wwwroot\ProfilePic\Avatar.jpg" />
+    <Content Include="wwwroot\ProfilePic\logo.jpg" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -177,10 +260,17 @@
     <Content Include="Views\Employee\_ApplyLeave.cshtml" />
     <Content Include="Views\Employee\_LeaveDetails.cshtml" />
     <Content Include="Views\_ViewImports.cshtml" />
+    <Content Include="wwwroot\lib\font-awesome\css\font-awesome.css.map" />
+    <Content Include="wwwroot\lib\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="wwwroot\lib\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="wwwroot\lib\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="wwwroot\lib\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="wwwroot\lib\font-awesome\fonts\FontAwesome.otf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="wwwroot\js\Auth\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -21,24 +21,24 @@ using LMS.Utility.Helpers;
 using System.Web.Mvc;
 using System.Configuration;
 using System.Web.Security;
+using LMS.Repository.Repositories.Auth;
 
 namespace LMS.WEBDOTNET.Controllers
 {
     public class AuthController : Controller
     {
-       // private readonly IHostingEnvironment _hostingEnvironment;
-       // private readonly IConfiguration _configuration;
-        private readonly IAuthRepository _authRepository;
-
-        public AuthController( IAuthRepository authRepository)
+        // private readonly IHostingEnvironment _hostingEnvironment;
+        // private readonly IConfiguration _configuration;
+        private IAuthRepository _authRepository = new AuthRepository();
+        //var container = Configuration.IoCBuilder.Build();
+        //public AuthController( IAuthRepository authRepository)
+        //{
+        //  _hostingEnvironment = hostingEnvironment;
+        //   _configuration = configuration;
+        //_authRepository = authRepository;
+        //}
+        public ActionResult Index()
         {
-          //  _hostingEnvironment = hostingEnvironment;
-         //   _configuration = configuration;
-            _authRepository = authRepository;
-        }
-        public ActionResult Index(string returnUrl)
-        {
-            TempData[Constants.SessionRedirectUrl] = returnUrl;
             return View();
         }
         [HttpPost]
@@ -48,8 +48,11 @@ namespace LMS.WEBDOTNET.Controllers
             {
                 if (emp != null && emp.Email != null && emp.Password != null)
                 {
+                    //var resp = _authRepository.Login(emp.Email.Trim(), emp.Password);
+                    //var resp = _authRepository.Login(emp.Email.Trim(), emp.Password)
+                    //using (true)
+                    //{
                     var resp = _authRepository.Login(emp.Email.Trim(), emp.Password);
-
                     var u = new UserViewModel();
                     if (resp != null)
                     {
@@ -74,6 +77,7 @@ namespace LMS.WEBDOTNET.Controllers
                         }
                     }
 
+                    //}
                 }
                 throw new InvalidUserCredentialsException("Entered user credentials are not valid");
             }
@@ -268,24 +272,25 @@ namespace LMS.WEBDOTNET.Controllers
         {
             try
             {
-                var identity = new ClaimsIdentity(new[] {
-                    new Claim(ClaimTypes.Email,result.Email),
-                    new Claim(ClaimTypes.Role,result.RoleName)
-                    }, CookieAuthenticationDefaults.AuthenticationScheme);
+                //var identity = new ClaimsIdentity(new[] {
+                //    new Claim(ClaimTypes.Email,result.Email),
+                //    new Claim(ClaimTypes.Role,result.RoleName)
+                //    }, Cookie);
 
-                var principal = new ClaimsPrincipal(identity);
-                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                //var principal = new ClaimsPrincipal(identity);
+                //HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                 if (!string.IsNullOrEmpty(result.PasswordExpirayDate) && DateTime.Now.Date <= Convert.ToDateTime(result.PasswordExpirayDate))
                 {
                     //Handled if image url exist in db but not available physically
-                    string picpath = _hostingEnvironment.WebRootPath + result.ProfilePic;
+                    string picpath = "";//_hostingEnvironment.WebRootPath + result.ProfilePic;
                     if (!System.IO.File.Exists(picpath))
                     {
                         string fName = $@"\ProfilePic\" + "Avatar.jpg";
                         result.ProfilePic = fName;
                     }
-                    HttpContext.Session.Set<UserViewModel>(Constants.SessionKeyUserInfo, result);
+                    //HttpContext.Session.Set<UserViewModel>(Constants.SessionKeyUserInfo, result);
+                    Session[Constants.SessionKeyUserInfo] = result;
                     return GoAhead(result.RoleName, result.UserId);
                 }
                 else
@@ -302,7 +307,7 @@ namespace LMS.WEBDOTNET.Controllers
         [HttpGet]
         public ActionResult UnauthorizedUser()
         {
-            var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
+            var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];//HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
             if (user?.RoleName == Constants.AdminRole)
             {
                 ViewBag.Message = "This features is not related to Admin";
@@ -321,7 +326,7 @@ namespace LMS.WEBDOTNET.Controllers
         [HttpPost]
         public ActionResult ForgotPassword(string email)
         {
-            var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);//for loggging
+            var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];//HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);//for loggging
             try
             {
                 string emailID = string.Empty;
@@ -332,12 +337,12 @@ namespace LMS.WEBDOTNET.Controllers
 
                     /* Mail Send */
                     string emailEncr = EncryptDecrypt.Encrypt(emailID, "sblw-3hn8-sqoy19");
-                    var basePath = string.Format("{0}://{1}", Request.Scheme, Request.Host);
+                    var basePath = ""; //string.Format("{0}://{1}", Request.Scheme, Request.Host);
                     var link = basePath + "/Auth/ResetPassword/?id=" + emailEncr;
 
-                    var strFrom = _configuration["EmailCredential:Fromemail"];
-                    var strFromPassword = _configuration["EmailCredential:FromPassword"];
-                    var strCCEmail = _configuration["EmailNotification:CCemail"];
+                    var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
+                    var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
+                    var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
                     var subject = "Reset Password";
                     var body = "Dear Candidate,<br/>You initiated a request to help with your account password. Click the link below to set a new password for Steeprise LMS portal" +
                         "<br/><br/><a href=" + link + ">Reset Password link</a><br><br>" + "Thank You<br>Steeprise Team";
@@ -454,7 +459,7 @@ namespace LMS.WEBDOTNET.Controllers
         [HttpGet]
         public ActionResult ChangePassword()
         {
-            var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
+            var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];//HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
             if (user != null)
             {
                 ViewBag.user = user?.Email;
@@ -466,7 +471,7 @@ namespace LMS.WEBDOTNET.Controllers
         [HttpPost]
         public ActionResult CreateNewPassword(ResetPasswordViewModel model)
         {
-            var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
+            var user = (UserViewModel)Session[Constants.SessionKeyUserInfo]; //HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
             try
             {
                 var dt = _authRepository.GetUserData(model.Email);

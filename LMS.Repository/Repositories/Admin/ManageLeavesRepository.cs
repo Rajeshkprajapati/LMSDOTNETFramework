@@ -14,11 +14,11 @@ namespace LMS.Repository.Repositories.Admin
     public class ManageLeavesRepository : IManageLeavesRepository
     {
         private readonly string connectionString;
-        public ManageLeavesRepository(Configuration configurgation)
-        {
-            // connectionString = configurgation["ConnectionStrings:LMSDB"];
-            connectionString = ConfigurationManager.ConnectionStrings["LMS"].ConnectionString;
-        }
+        //public ManageLeavesRepository(Configuration configurgation)
+        //{
+        //    // connectionString = configurgation["ConnectionStrings:LMSDB"];
+        //    connectionString = ConfigurationManager.ConnectionStrings["LMS"].ConnectionString;
+        //}
 
         public bool ApproveRejectLeave(ManageLeaveDataModel m)
         {

@@ -1,38 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using LMS.Model.ViewModel.Employee;
 using LMS.Model.ViewModel.Shared;
 using LMS.Repository.DataModel.Employee;
 using LMS.Repository.Interfaces.Employee;
+using LMS.Repository.Repositories.Employee;
 using LMS.Utility.Exceptions;
 using LMS.Utility.ExtendedMethods;
 using LMS.Utility.Helpers;
-using LMS.Web.Filters;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace LMS.WEBDOTNET.Controllers
 {
-    [Route("[controller]")]
-    [UserAuthentication(Constants.EmployeeRole)]
+    //[Route("[controller]")]
+    //[UserAuthentication(Constants.EmployeeRole)]
     public class EmployeeController : Controller
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IConfiguration _configuration;
-        private readonly ILeaveRepository _leaveRepository;
+        private readonly ILeaveRepository _leaveRepository = new LeaveRepository();
 
-        public EmployeeController(IHostingEnvironment hostingEnvironment, IConfiguration configuration, ILeaveRepository leaveRepository)
-        {
-            _hostingEnvironment = hostingEnvironment;
-            _configuration = configuration;
-            _leaveRepository = leaveRepository;
-        }
         public ActionResult Index()
         {
             return View();
@@ -40,15 +31,15 @@ namespace LMS.WEBDOTNET.Controllers
         [Route("[action]")]
         public ActionResult Dashboard()
         {
-            var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
-            //if (user == null || user.RoleName != Constants.EmployeeRole)
-            //{
-            //    return RedirectToAction("Index", "Auth");
-            //}
-            //else
-            //{
+            var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];
+            if (user == null || user.RoleName != Constants.EmployeeRole)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+            else
+            {
                 ViewBag.Name = user?.FirstName;
-            //}
+            }
             return View();
         }
 
@@ -63,7 +54,7 @@ namespace LMS.WEBDOTNET.Controllers
         [Route("[action]")]
         public PartialViewResult LeaveDetails()
         {
-            var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
+            var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];
             if (user != null)
             {
                 var list = GetAllLeaveData(user.UserId) ?? new List<LeaveDetailsViewModel>();
@@ -148,7 +139,7 @@ namespace LMS.WEBDOTNET.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public ActionResult ApplyLeave([FromForm]LeaveDetailsViewModel model)
+        public ActionResult ApplyLeave(LeaveDetailsViewModel model)
         {
             try
             {
@@ -174,7 +165,7 @@ namespace LMS.WEBDOTNET.Controllers
         {
             try
             {
-                var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
+                var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];
                 var model = new LeaveDetailsModel()
                 {
                     StartDate = leave.StartDate,
@@ -207,13 +198,13 @@ namespace LMS.WEBDOTNET.Controllers
         {
             try
             {
-                var user = HttpContext.Session.Get<UserViewModel>(Constants.SessionKeyUserInfo);
+                var user = (UserViewModel)Session[Constants.SessionKeyUserInfo];
                 var subject = "Leave has been applied successfully";
                 var body = "Dear " + user?.Email + ",<br/><br/> Your Leave has been applied for duration " + model.StartDate + " To " + model.EndDate + " successfully."
                         + "<br/><br/> Thank You <br/> Steeprise Team";
-                var strFrom = _configuration["EmailCredential:Fromemail"];
-                var strFromPassword = _configuration["EmailCredential:FromPassword"];
-                var strCCEmail = _configuration["EmailNotification:CCemail"];
+                var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
+                var strFromPassword = ConfigurationManager.AppSettings["EmailCredential:FromPassword"];
+                var strCCEmail = ConfigurationManager.AppSettings["EmailNotification:CCemail"];
 
                 var email = new MailMessage(strFrom, user.Email)
                 {

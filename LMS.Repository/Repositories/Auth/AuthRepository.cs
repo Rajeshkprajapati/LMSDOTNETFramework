@@ -2,9 +2,8 @@
 using LMS.Repository.Helper;
 using LMS.Repository.Interfaces.Auth;
 using LMS.Utility.Exceptions;
-using System.Configuration;
-//using Microsoft.Extensions.Configuration;
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,14 +13,15 @@ namespace LMS.Repository.Repositories.Auth
 {
     public class AuthRepository : IAuthRepository
     {
-        private readonly string connectionString;
+        private readonly string connectionString = "Data Source=DESKTOP-PGDM0N4\\SQLEXPRESS; Initial Catalog=LMS; User ID=sa; Password=vishwakarma@123";//WebConfigurationManager.AppSettings["connString"];;
+        //private readonly string connectionString = ConfigurationManager.AppSettings["connString"];
 
-        public AuthRepository( Configuration configuration)
-        {
-            //connectionString = configuration["ConnectionStrings:LMSDB"];
-            connectionString = ConfigurationManager.ConnectionStrings["LMS"].ConnectionString;
-        }
-
+        //public AuthRepository( Configuration configuration)
+        //{
+        //    //connectionString = configuration["ConnectionStrings:LMSDB"];
+        //    connectionString = ConfigurationManager.ConnectionStrings["LMS"].ConnectionString;
+        //}
+        
         public bool CheckIfUserExist(string email)
         {
             using (var connection = new SqlConnection(connectionString))
