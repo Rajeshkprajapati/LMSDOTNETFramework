@@ -13,10 +13,7 @@ namespace LMS.Logger
         private static readonly string connectionString;
         static Logger()
         {
-           //connectionString = ConfigurationHelper.Config["ConnectionStrings:LMSDB"];
-
-            connectionString = ConfigurationManager.ConnectionStrings["LMS"].ConnectionString;
-
+          connectionString = ConfigurationManager.AppSettings["connString"];
         }
 
         private static void AddToDB(Logtype log, string message, Type classdetails, int userid, Exception exception = null, string details = null)
@@ -52,7 +49,7 @@ namespace LMS.Logger
             }
             catch (Exception ex)
             {
-                NLogger.logger.FileLogger(ex.Message);
+               // NLogger.logger.FileLogger(ex.Message);
             }
         }
 

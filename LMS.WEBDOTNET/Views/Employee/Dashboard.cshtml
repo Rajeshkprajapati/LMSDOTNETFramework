@@ -10,9 +10,9 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link href="~/lib/Calendar/css/tail.datetime-default-blue.css" rel="stylesheet" />
-    <link href="~/css/Employee/dashboard.css" rel="stylesheet" />
-    <link href="~/lib/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/Calendar/css/tail.datetime-default-blue.css" rel="stylesheet" />
+    <link href="~/wwwroot/css/Employee/dashboard.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/datatables/css/dataTables.bootstrap4.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -21,9 +21,9 @@
             <div class="custom-menu">
                 <button type="button" id="sidebarCollapse" class="btn btn-primary"></button>
             </div>
-            <div class="img bg-wrap text-center py-4" style="background-image: url('/images/sidebar_bg_1.jpg');">
+            <div class="img bg-wrap text-center py-4" style="background-image: url('/wwwroot/images/sidebar_bg_1.jpg');">
                 <div class="user-logo">
-                    <div class="img" style="background-image: url('/ProfilePic/Avatar.jpg');"></div>
+                    <div class="img" style="background-image: url('/wwwroot/ProfilePic/Avatar.jpg');"></div>
                     @if (ViewBag.Name != null)
                     {
                         <h3>@ViewBag.Name</h3>
@@ -72,8 +72,8 @@
         </div>
     </div>
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="~/wwwroot/lib/jquery/dist/jquery.js"></script>
+        <script src="~/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
@@ -91,9 +91,9 @@
     </environment>
 
 
-    <script src="~/lib/Calendar/js/tail.datetime.js"></script>*
-    <script src="~/lib/datatables/js/jquery.dataTables.js"></script>
-    <script src="~/lib/datatables/js/dataTables.bootstrap4.js"></script>
+    <script src="~/wwwroot/lib/Calendar/js/tail.datetime.js"></script>*
+    <script src="~/wwwroot/lib/datatables/js/jquery.dataTables.js"></script>
+    <script src="~/wwwroot/lib/datatables/js/dataTables.bootstrap4.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

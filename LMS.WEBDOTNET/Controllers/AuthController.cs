@@ -83,7 +83,7 @@ namespace LMS.WEBDOTNET.Controllers
             }
             catch (InvalidUserCredentialsException ex)
             {
-                //Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AuthController), ex);
+                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AuthController), ex);
                 //ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
                 ViewBag.Message = "Invalid Credential!";
                 ViewBag.Success = false;
@@ -337,7 +337,7 @@ namespace LMS.WEBDOTNET.Controllers
 
                     /* Mail Send */
                     string emailEncr = EncryptDecrypt.Encrypt(emailID, "sblw-3hn8-sqoy19");
-                    var basePath = ""; //string.Format("{0}://{1}", Request.Scheme, Request.Host);
+                    var basePath = string.Format("{0}://{1}", Request.Url.Scheme, Request.Url.Host);
                     var link = basePath + "/Auth/ResetPassword/?id=" + emailEncr;
 
                     //var strFrom = ConfigurationManager.AppSettings["EmailCredential:Fromemail"];
@@ -399,7 +399,7 @@ namespace LMS.WEBDOTNET.Controllers
             }
             catch (Exception ex)
             {
-                //Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AuthController), ex);
+                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AuthController), ex);
                 ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
                 ViewData["SuccessMessage"] = ex.Message;//"Error Occured,Please contact at support@steeprise.com";
             }

@@ -13,7 +13,9 @@ namespace LMS.Repository.Repositories.Employee
 {
     public class LeaveRepository : ILeaveRepository
     {
-        private readonly string connectionString;
+        //private readonly string connectionString;
+
+        private readonly string connectionString = ConfigurationManager.AppSettings["connString"];
         //public LeaveRepository(Configuration configuration)
         //{
         //    //connectionString = configuration["ConnectionStrings:LMSDB"];

@@ -98,12 +98,12 @@ namespace LMS.WEBDOTNET.Controllers
             }
             catch (DataNotFoundException ex)
             {
-                //Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AdminController), ex);
+                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AdminController), ex);
                 ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
             }
             catch (Exception ex)
             {
-                //Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AdminController), ex);
+                Logger.Logger.WriteLog(Logger.Logtype.Error, ex.Message, 0, typeof(AdminController), ex);
                 ModelState.AddModelError("ErrorMessage", string.Format("{0}", ex.Message));
             }
             return null;
